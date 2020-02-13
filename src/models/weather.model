@@ -1,0 +1,14 @@
+interface WeatherCloudsModel {
+	id: number;
+	main: string;
+	description: string;
+	icon: string;
+}
+
+interface WeatherModel {
+	id: number;
+	name: string;
+	temp: number;
+	wind: number;
+	clouds: WeatherCloudsModel;
+}
