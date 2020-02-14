@@ -10,7 +10,18 @@ const API_KEY = '';
  */
 const API_PATH = '//api.openweathermap.org/data/2.5/';
 
+/**
+ * The list of names for routing.
+ * @enum {string}
+ */
+const ROUTE_STATES = {
+	HOME: 'home',
+	ABOUT: 'about',
+	ERROR: 'error',
+};
+
 export {
 	API_KEY,
 	API_PATH,
+	ROUTE_STATES,
 };

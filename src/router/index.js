@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home';
 import Error from '@/views/Error';
+import { ROUTE_STATES } from '@/constants';
 
 Vue.use(VueRouter);
 
@@ -11,12 +12,12 @@ const router = new VueRouter({
 	routes: [
 		{
 			path: '/',
-			name: 'home',
+			name: ROUTE_STATES.HOME,
 			component: Home,
 		},
 		{
 			path: '*',
-			name: 'error',
+			name: ROUTE_STATES.ERROR,
 			component: Error,
 		},
 	],
