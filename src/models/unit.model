@@ -1,0 +1,6 @@
+interface UnitModel {
+	id: number;
+	key: string;
+	name: string;
+	symbol: string;
+}

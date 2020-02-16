@@ -1,0 +1,5 @@
+interface CityModel {
+	id: number;
+	name: string;
+	temp: number;
+}

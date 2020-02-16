@@ -20,8 +20,28 @@ const ROUTE_STATES = {
 	ERROR: 'error',
 };
 
+/**
+ * The list of temperature measurement.
+ * @const {!UnitModel[]}
+ */
+const TEMPERATURE_UNITS = [
+	{
+		id: 1,
+		key: 'metric',
+		name: 'Celsius',
+		symbol: '°C',
+	},
+	{
+		id: 2,
+		key: 'imperial',
+		name: 'Fahrenheit',
+		symbol: '°F',
+	},
+];
+
 export {
 	API_KEY,
 	API_PATH,
 	ROUTE_STATES,
+	TEMPERATURE_UNITS,
 };
