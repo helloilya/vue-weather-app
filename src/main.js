@@ -3,6 +3,7 @@ import VueMeta from 'vue-meta';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
+import '@/filters';
 
 Vue.config.productionTip = false;
 Vue.config.performance = true;
