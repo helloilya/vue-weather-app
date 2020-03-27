@@ -11,9 +11,11 @@ const getLocationCoords = () => {
 					lat: position.coords.latitude,
 					lon: position.coords.longitude,
 				});
+			}, () => {
+				resolve({});
 			});
 		} else {
-			reject({});
+			resolve({});
 		}
 	});
 };

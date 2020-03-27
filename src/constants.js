@@ -11,6 +11,12 @@ const API_KEY = '';
 const API_PATH = '//api.openweathermap.org/data/2.5/';
 
 /**
+ * The default city for first init.
+ * @const {string}
+ */
+const DEFAULT_CITY = 'london';
+
+/**
  * The list of names for routing.
  * @enum {string}
  */
@@ -42,6 +48,7 @@ const TEMPERATURE_UNITS = [
 export {
 	API_KEY,
 	API_PATH,
+	DEFAULT_CITY,
 	ROUTE_STATES,
 	TEMPERATURE_UNITS,
 };

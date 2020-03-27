@@ -1,6 +1,7 @@
 import api from '@/api';
 import geo from '@/services/geo';
 import { constants as settingStore } from '@/store/modules/setting';
+import { DEFAULT_CITY } from '@/constants';
 
 const state = {
 	isLoaded: false,
@@ -29,7 +30,7 @@ const actions = {
 	},
 	async getDefaultWeather({ commit }) {
 		const coords = await geo.getLocationCoords();
-		const weather = await api.weather.getWeatherByCoords(coords);
+		const weather = coords.lat ? await api.weather.getWeatherByCoords(coords) : await api.weather.getWeatherByCity(DEFAULT_CITY);
 		commit('updateWeather', weather);
 		commit('setStateAsLoaded');
 	},
