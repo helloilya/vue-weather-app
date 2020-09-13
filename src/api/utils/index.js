@@ -1,5 +1,5 @@
 /**
- * Converts OpenWeatherMapData to WeatherModel.
+ * Converts OpenWeatherMapData response to WeatherModel.
  * @param {!Object} data
  * @return {!WeatherModel}
  */

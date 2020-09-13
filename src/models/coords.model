@@ -1,4 +1,4 @@
-interface CoodsModel {
+interface CoordsModel {
 	lat: number;
 	lon: number;
 }

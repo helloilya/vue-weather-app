@@ -2,7 +2,7 @@ import request from '@/api/request';
 import utils from '@/api/utils';
 
 /**
- * Gets the current weather by city.
+ * Gets the current weather by location.
  * @param {string} city
  * @return {!Promise<!WeatherModel>}
  */
@@ -18,7 +18,7 @@ const getWeatherByCity = (city) => {
 
 /**
  * Gets the current weather by geo coords.
- * @param {!Object} coords
+ * @param {!CoordsModel} coords
  * @return {!Promise<!WeatherModel>}
  */
 const getWeatherByCoords = (coords) => {
