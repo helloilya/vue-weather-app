@@ -8,18 +8,14 @@
 		@key-enter="{function}" />
 -->
 
-<!-- @todo: Support custom v-model.lazy [github.com/vuejs/vue/issues/6914] -->
-
 <template>
-	<div class="location-control">
-		<input
-			:value="value"
-			:placeholder="placeholder"
-			:disabled="disabled"
-			:required="required"
-			@input="$emit('input', $event.target.value)"
-			@keyup.enter="$emit('key-enter', $event.target.value)">
-	</div>
+	<input
+		:value="value"
+		:placeholder="placeholder"
+		:disabled="disabled"
+		:required="required"
+		@input="$emit('input', $event.target.value)"
+		@keyup.enter="$emit('key-enter', $event.target.value)">
 </template>
 
 <script>
