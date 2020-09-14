@@ -14,7 +14,7 @@ const API_PATH = '//api.openweathermap.org/data/2.5/';
  * The default city for first init.
  * @const {string}
  */
-const DEFAULT_CITY = 'london';
+const DEFAULT_CITY = 'Saint Petersburg';
 
 /**
  * The list of names for routing.

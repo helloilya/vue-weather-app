@@ -4,6 +4,7 @@ import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
 import '@/filters';
+import '@/validators';
 
 Vue.config.productionTip = false;
 Vue.config.performance = true;
