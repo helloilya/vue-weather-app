@@ -1,6 +1,7 @@
 <template>
-	<div>
-		<h1>Error</h1>
+	<div class="container">
+		<h1>Ops, sorry</h1>
+		<p>The page you were looking for doesn't exist.</p>
 	</div>
 </template>
 
@@ -8,7 +9,7 @@
 export default {
 	name: 'Error',
 	metaInfo: {
-		title: 'Error',
+		title: 'Page Not Found',
 	},
 };
 </script>
