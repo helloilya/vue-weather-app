@@ -16,6 +16,11 @@ const router = new VueRouter({
 			component: Home,
 		},
 		{
+			path: '/about',
+			name: ROUTE_STATES.ABOUT,
+			component: () => import(/* webpackChunkName: 'about' */ '@/views/About'),
+		},
+		{
 			path: '*',
 			name: ROUTE_STATES.ERROR,
 			component: Error,
