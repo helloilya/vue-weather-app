@@ -6,8 +6,8 @@ import store from '@/store';
 import '@/filters';
 import '@/validators';
 
-Vue.config.productionTip = false;
-Vue.config.performance = true;
+Vue.config.productionTip = process.env.NODE_ENV !== 'production';
+Vue.config.performance = process.env.NODE_ENV !== 'production';
 
 Vue.use(VueMeta);
 
