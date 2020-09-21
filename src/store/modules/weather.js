@@ -30,7 +30,7 @@ const actions = {
 	},
 	async getDefaultWeather({ commit }) {
 		const coords = await geo.getLocationCoords();
-		const weather = coords.lat ? await api.weather.getWeatherByCoords(coords) : await api.weather.getWeatherByCity(DEFAULT_CITY);
+		const weather = coords ? await api.weather.getWeatherByCoords(coords) : await api.weather.getWeatherByCity(DEFAULT_CITY);
 		commit('updateWeather', weather);
 		commit('setStateAsLoaded');
 	},

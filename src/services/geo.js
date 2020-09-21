@@ -1,6 +1,6 @@
 /**
  * Gets lat and lon coords based on location.
- * @return {!Promise<!CoordsModel>}
+ * @return {!Promise<?CoordsModel>}
  */
 const getLocationCoords = () => {
 	const geo = navigator.geolocation;
@@ -12,7 +12,7 @@ const getLocationCoords = () => {
 					lon: position.coords.longitude,
 				});
 			}, () => {
-				resolve({});
+				resolve(null);
 			});
 		} else {
 			resolve({});
