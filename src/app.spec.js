@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import sinon from 'sinon';
 import { createLocalVue, shallowMount, RouterLinkStub } from '@vue/test-utils';
 import { expect } from 'chai';
-import Home from './App';
+import App from './App';
 import { constants as settingStore } from '@/store/modules/setting';
 import { constants as weatherStore } from '@/store/modules/weather';
 
@@ -13,8 +13,17 @@ const fakeUnit = {
 	name: 'unit',
 };
 
+const fakeRoute = {
+	path: '',
+	name: 'routeName',
+};
+
 const localVue = createLocalVue();
 const filter = (value) => value;
+const router = new VueRouter({
+	routes: [fakeRoute],
+});
+
 localVue.filter('round', filter);
 localVue.use(Vuex);
 localVue.use(VueRouter);
@@ -39,17 +48,19 @@ describe('app', () => {
 			actions,
 		});
 
-		comp = shallowMount(Home, {
+		comp = shallowMount(App, {
 			localVue,
 			store,
-			stubs: {
-				RouterLink: RouterLinkStub,
-			},
+			router,
 		});
 	});
 
 	it('should set unitId', () => {
 		expect(comp.vm.unit).to.equal(fakeUnit.id);
+	});
+
+	it('should set routeName', () => {
+		expect(comp.vm.routeName).to.equal(fakeRoute.name);
 	});
 
 	it('should call getDefaultWeather', () => {
