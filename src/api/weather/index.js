@@ -1,4 +1,4 @@
-import request from '@/api/request';
+import request from './request';
 import utils from '@/api/utils';
 
 /**
