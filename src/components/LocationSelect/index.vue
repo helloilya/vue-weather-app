@@ -7,19 +7,19 @@
 
 <template>
 	<ValidationProvider v-slot="{errors, invalid}" ref="city" tag="div" rules="city|required" class="location-select">
-		<LocationControl ref="input" v-model="selectedLocation" class="location-select-field" placeholder="City name" @key-enter="updateLocation" />
+		<LocationAutoSuggestionControl ref="input" v-model="selectedLocation" placeholder="City name" @key-enter="updateLocation" />
 		<button type="button" class="location-select-button" :disabled="invalid" @click="updateLocation">Search</button>
 		<span class="location-select-message">{{errors[0]}}</span>
 	</ValidationProvider>
 </template>
 
 <script>
-import LocationControl from '@/controls/LocationControl';
+import LocationAutoSuggestionControl from '@/controls/LocationAutoSuggestionControl';
 
 export default {
 	name: 'LocationSelect',
 	components: {
-		LocationControl,
+		LocationAutoSuggestionControl,
 	},
 	props: {
 		location: {
@@ -48,10 +48,6 @@ export default {
 .location-select {
 	position: relative;
 
-	&-field {
-		padding-right: 80px;
-	}
-
 	&-message {
 		position: absolute;
 		bottom: -1.5em;
@@ -65,6 +61,7 @@ export default {
 		position: absolute;
 		top: 3px;
 		right: 3px;
+		z-index: 1;
 	}
 }
 </style>
