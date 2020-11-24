@@ -2,21 +2,21 @@ import { TEMPERATURE_UNITS } from '@/constants';
 
 const state = {
 	unit: 1,
-	cities: [], // {!CityModel[]}
+	history: [], // {!HistoryModel[]}
 };
 
 const getters = {
 	getUnit: (state) => TEMPERATURE_UNITS.find((unit) => unit.id === state.unit),
-	getCities: (state) => state.cities,
-	getCityById: (state) => (id) => state.cities.find((city) => city.id === id),
+	getHistory: (state) => state.history,
 };
 
 const mutations = {
 	updateUnit(state, payload) {
 		state.unit = payload;
 	},
-	addCity(state, payload) {
-		state.cities.push(payload);
+	/** @type {!HistoryModel} */
+	saveCity(state, payload) {
+		state.history.push(payload);
 	},
 };
 
@@ -24,10 +24,11 @@ const actions = {
 	updateUnit({ commit }, unit) {
 		commit('updateUnit', unit);
 	},
-	addCity({ commit }, weather) {
-		commit('addCity', {
+	/** @type {!WeatherModel} */
+	saveCity({ commit }, weather) {
+		commit('saveCity', {
 			id: weather.id,
-			name: weather.name,
+			city: weather.name,
 			temp: weather.temp,
 		});
 	},
@@ -36,12 +37,11 @@ const actions = {
 export const constants = {
 	getters: {
 		unit: 'setting/getUnit',
-		cities: 'setting/getCities',
-		cityById: 'setting/getCityById',
+		history: 'setting/getHistory',
 	},
 	actions: {
 		updateUnit: 'setting/updateUnit',
-		addCity: 'setting/addCity',
+		saveCity: 'setting/saveCity',
 	},
 };
 

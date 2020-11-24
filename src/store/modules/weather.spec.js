@@ -66,7 +66,7 @@ describe('weatherStore', () => {
 		it('should dispatch action from settingStore', async () => {
 			await actions.updateWeather({ dispatch, commit }, fakeLocation);
 
-			sinon.assert.calledWith(dispatch, settingStore.actions.addCity);
+			sinon.assert.calledWith(dispatch, settingStore.actions.saveCity);
 		});
 
 		it('should call setStateAsLoaded mutation', async () => {

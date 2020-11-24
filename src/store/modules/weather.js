@@ -25,7 +25,11 @@ const mutations = {
 const actions = {
 	async updateWeather({ dispatch, commit }, location) {
 		const weather = await api.weather.getWeatherByCity(location);
-		dispatch(settingStore.actions.addCity, weather, { root: true });
+		if (!weather.id) {
+			return;
+		}
+
+		dispatch(settingStore.actions.saveCity, weather, { root: true });
 		commit('updateWeather', weather);
 	},
 	async getDefaultWeather({ commit }) {

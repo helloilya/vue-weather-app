@@ -1,0 +1,5 @@
+interface HistoryModel {
+	id: number;
+	city: string;
+	temp: number;
+}
