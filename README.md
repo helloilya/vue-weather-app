@@ -25,6 +25,7 @@ The docs for list rules can be fount on [eslint](https://eslint.org/docs/rules/)
 
 ### Changelog
 
+* 0.2.0 — Integration with GeoDB API.
 * 0.1.0 — Initial release.
 
 ## License
