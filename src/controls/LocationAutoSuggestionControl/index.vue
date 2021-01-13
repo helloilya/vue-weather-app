@@ -68,7 +68,7 @@ export default {
 						this.suggestion = isLowerCase ? name.toLowerCase() : name;
 					}
 				}
-			}, 150);
+			}, 250);
 		},
 		onEnterHandler(value) {
 			this.$emit('key-enter', value);
