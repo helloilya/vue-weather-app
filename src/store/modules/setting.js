@@ -8,23 +8,28 @@ const state = {
 const getters = {
 	getUnit: (state) => TEMPERATURE_UNITS.find((unit) => unit.id === state.unit),
 	getHistory: (state) => state.history,
+	getLastSavedCityName: (state) => state.history[state.history.length - 1].city,
 };
 
 const mutations = {
+	/** @param {number} payload */
 	updateUnit(state, payload) {
 		state.unit = payload;
 	},
-	/** @type {!HistoryModel} */
+
+	/** @param {!HistoryModel} payload */
 	saveCity(state, payload) {
 		state.history.push(payload);
 	},
 };
 
 const actions = {
+	/** @param {number} unit */
 	updateUnit({ commit }, unit) {
 		commit('updateUnit', unit);
 	},
-	/** @type {!WeatherModel} */
+
+	/** @param {!WeatherModel} weather */
 	saveCity({ commit }, weather) {
 		commit('saveCity', {
 			id: weather.id,
@@ -38,6 +43,7 @@ export const constants = {
 	getters: {
 		unit: 'setting/getUnit',
 		history: 'setting/getHistory',
+		lastSavedCityName: 'setting/getLastSavedCityName',
 	},
 	actions: {
 		updateUnit: 'setting/updateUnit',
