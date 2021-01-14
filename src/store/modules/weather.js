@@ -1,5 +1,6 @@
 import api from '@/api';
 import geo from '@/services/geo';
+import utils from '@/store/utils/weather';
 import { constants as settingStore } from '@/store/modules/setting';
 import { DEFAULT_CITY } from '@/constants';
 
@@ -17,12 +18,18 @@ const mutations = {
 	setStateAsLoaded(state) {
 		state.isLoaded = true;
 	},
+
+	/** @param {!WeatherModel} payload */
 	updateWeather(state, payload) {
 		state.weather = payload;
 	},
 };
 
 const actions = {
+	/**
+	 * Gets weather by city name and updates data/query.
+	 * @param {string} location
+	 */
 	async updateWeather({ dispatch, commit }, location) {
 		const weather = await api.weather.getWeatherByCity(location);
 		if (!weather.id) {
@@ -30,11 +37,32 @@ const actions = {
 		}
 
 		dispatch(settingStore.actions.saveCity, weather, { root: true });
+		utils.updateLocationParamValue(weather.name);
 		commit('updateWeather', weather);
 	},
-	async getDefaultWeather({ commit }) {
+
+	/**
+	 * Inits default weather based on query params and user geo coords.
+	 */
+	async initWeather({ dispatch, commit }) {
+		const query = utils.getLocationParamValue();
 		const coords = await geo.getLocationCoords();
-		const weather = coords ? await api.weather.getWeatherByCoords(coords) : await api.weather.getWeatherByCity(DEFAULT_CITY);
+
+		let location;
+		if (query && query.length > 2) {
+			const cities = await api.geo.getCities(query);
+			location = cities.length ? cities[0].name : undefined;
+		}
+
+		let weather;
+		if (location) {
+			weather = await api.weather.getWeatherByCity(location);
+		} else {
+			weather = coords ? await api.weather.getWeatherByCoords(coords) : await api.weather.getWeatherByCity(DEFAULT_CITY);
+		}
+
+		dispatch(settingStore.actions.saveCity, weather, { root: true });
+		utils.updateLocationParamValue(weather.name);
 		commit('updateWeather', weather);
 		commit('setStateAsLoaded');
 	},
@@ -46,7 +74,7 @@ export const constants = {
 		weather: 'weather/getWeather',
 	},
 	actions: {
-		getDefault: 'weather/getDefaultWeather',
+		getDefault: 'weather/initWeather',
 		update: 'weather/updateWeather',
 	},
 };

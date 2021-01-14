@@ -11,6 +11,8 @@ Vue.config.performance = process.env.NODE_ENV !== 'production';
 
 Vue.use(VueMeta);
 
+global.$router = router;
+
 new Vue({
 	router,
 	store,
