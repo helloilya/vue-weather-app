@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import api from '@/api';
 import geo from '@/services/geo';
 import weather from './weather';
+import utils from '@/store/utils/weather';
 import { constants as settingStore } from '@/store/modules/setting';
 
 const { getters, mutations, actions } = weather;
@@ -17,21 +18,30 @@ describe('weatherStore', () => {
 	let getLocationCoordsStab;
 	let getWeatherByCoordsStab;
 	let getWeatherByCityStab;
+	let getLocationParamValueStub;
+	let updateLocationParamValueStub;
 
 	beforeEach(() => {
 		state = {
 			isLoaded: false,
 			weather: {},
 		};
+
 		getLocationCoordsStab = sinon.stub(geo, 'getLocationCoords').resolves({});
 		getWeatherByCoordsStab = sinon.stub(api.weather, 'getWeatherByCoords').resolves(fakeWeather);
 		getWeatherByCityStab = sinon.stub(api.weather, 'getWeatherByCity').resolves(fakeWeather);
+
+		getLocationParamValueStub = sinon.stub(utils, 'getLocationParamValue').resolves(fakeLocation);
+		updateLocationParamValueStub = sinon.stub(utils, 'updateLocationParamValue');
 	});
 
 	afterEach(() => {
 		getLocationCoordsStab.restore();
 		getWeatherByCoordsStab.restore();
 		getWeatherByCityStab.restore();
+
+		getLocationParamValueStub.restore();
+		updateLocationParamValueStub.restore();
 	});
 
 	describe('mutations', () => {
@@ -57,22 +67,22 @@ describe('weatherStore', () => {
 			dispatch = sinon.spy();
 		});
 
-		it('should call updateWeather mutation', async () => {
-			await actions.updateWeather({ dispatch, commit }, fakeLocation);
+		describe('updateWeather', () => {
+			beforeEach(async () => {
+				await actions.updateWeather({ dispatch, commit }, fakeLocation);
+			});
 
-			sinon.assert.calledWith(commit, 'updateWeather', fakeWeather);
-		});
+			it('should call updateWeather mutation', () => {
+				sinon.assert.calledWith(commit, 'updateWeather', fakeWeather);
+			});
 
-		it('should dispatch action from settingStore', async () => {
-			await actions.updateWeather({ dispatch, commit }, fakeLocation);
+			it('should dispatch saveCity', () => {
+				sinon.assert.calledWith(dispatch, settingStore.actions.saveCity, fakeWeather);
+			});
 
-			sinon.assert.calledWith(dispatch, settingStore.actions.saveCity);
-		});
-
-		it('should call setStateAsLoaded mutation', async () => {
-			await actions.getDefaultWeather({ commit });
-
-			sinon.assert.calledWith(commit, 'setStateAsLoaded');
+			it('should call updateLocationParamValue method', () => {
+				sinon.assert.calledWith(utils.updateLocationParamValue, fakeLocation);
+			});
 		});
 	});
 });

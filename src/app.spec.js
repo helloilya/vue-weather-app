@@ -15,8 +15,10 @@ const fakeUnit = {
 
 const fakeRoute = {
 	path: '',
-	name: 'routeName',
+	name: 'name',
 };
+
+const fakeCity = 'city';
 
 const localVue = createLocalVue();
 const filter = (value) => value;
@@ -38,10 +40,11 @@ describe('app', () => {
 		getters = {
 			[settingStore.getters.unit]: () => fakeUnit,
 			[weatherStore.getters.isLoaded]: () => true,
+			[settingStore.getters.lastSavedCityName]: () => fakeCity,
 		};
 		actions = {
 			[settingStore.actions.updateUnit]: sinon.stub(),
-			[weatherStore.actions.getDefault]: sinon.stub(),
+			[weatherStore.actions.initWeather]: sinon.stub(),
 		};
 		store = new Vuex.Store({
 			getters,
@@ -59,12 +62,12 @@ describe('app', () => {
 		expect(comp.vm.unit).to.equal(fakeUnit.id);
 	});
 
-	it('should set routeName', () => {
-		expect(comp.vm.routeName).to.equal(fakeRoute.name);
+	it('should set currentState', () => {
+		expect(comp.vm.currentState).to.equal(fakeRoute.name);
 	});
 
 	it('should call getDefaultWeather', () => {
-		sinon.assert.called(actions[weatherStore.actions.getDefault]);
+		sinon.assert.called(actions[weatherStore.actions.initWeather]);
 	});
 
 	it('should call updateUnit', () => {
