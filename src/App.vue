@@ -5,8 +5,11 @@
 			<router-view />
 			<TemperatureControl ref="select" v-model="unit" class="app-temperature-control" @change="onChangeUnit()" />
 			<div class="app-menu">
-				<router-link to="/">Home</router-link>
-				<router-link v-if="routeName !== 'error'" to="/about">About</router-link>
+				<router-link v-if="currentState !== homeState"
+							 :to="{ name: homeState, query: { location: lastSavedCityName.toLowerCase() }}">
+					Home
+				</router-link>
+				<router-link v-else to="/about">About</router-link>
 			</div>
 		</div>
 	</div>
@@ -17,6 +20,7 @@ import { mapActions, mapGetters } from 'vuex';
 import TemperatureControl from '@/controls/TemperatureControl';
 import { constants as settingStore } from '@/store/modules/setting';
 import { constants as weatherStore } from '@/store/modules/weather';
+import { ROUTE_STATES } from '@/constants';
 
 export default {
 	name: 'App',
@@ -25,27 +29,29 @@ export default {
 	},
 	data: () => ({
 		unit: 0,
-		routeName: '',
+		currentState: '',
+		homeState: ROUTE_STATES.HOME,
 	}),
 	computed: {
 		...mapGetters({
 			isLoaded: weatherStore.getters.isLoaded,
 			unitObject: settingStore.getters.unit,
+			lastSavedCityName: settingStore.getters.lastSavedCityName,
 		}),
 	},
 	watch: {
 		'$route.name': function(name) {
-			this.routeName = name;
+			this.currentState = name;
 		},
 	},
 	created() {
 		this.unit = this.unitObject.id;
-		this.routeName = this.$route.name;
-		this.init();
+		this.currentState = this.$route.name;
+		this.initWeather();
 	},
 	methods: {
 		...mapActions({
-			init: weatherStore.actions.getDefault,
+			initWeather: weatherStore.actions.initWeather,
 			updateUnit: settingStore.actions.updateUnit,
 		}),
 		onChangeUnit() {

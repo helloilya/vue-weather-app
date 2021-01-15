@@ -74,7 +74,7 @@ export const constants = {
 		weather: 'weather/getWeather',
 	},
 	actions: {
-		getDefault: 'weather/initWeather',
+		initWeather: 'weather/initWeather',
 		update: 'weather/updateWeather',
 	},
 };
