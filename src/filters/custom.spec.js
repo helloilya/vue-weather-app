@@ -4,7 +4,7 @@ import { TEMPERATURE_UNITS } from '@/constants';
 
 const fakeValue = 1.7;
 
-describe('roundFilter', () => {
+describe(roundFilter.name, () => {
 	it('should return rounded off value', () => {
 		const result = Math.round(fakeValue);
 
@@ -12,7 +12,7 @@ describe('roundFilter', () => {
 	});
 });
 
-describe('temperatureFilter', () => {
+describe(temperatureFilter.name, () => {
 	it('should return value converted to imperial unit', () => {
 		const unit = TEMPERATURE_UNITS.find((item) => item.key === 'imperial');
 		const result = `${Math.round(fakeValue * 1.8 + 32)} ${unit.symbol}`;

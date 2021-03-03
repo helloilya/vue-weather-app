@@ -5,7 +5,7 @@ import TemperatureControl from './index';
 const localVue = createLocalVue();
 const fakeModelValue = 1;
 
-describe('temperatureControl', () => {
+describe(TemperatureControl.name, () => {
 	let comp;
 	let elSelect;
 

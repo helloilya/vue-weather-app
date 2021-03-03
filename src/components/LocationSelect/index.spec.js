@@ -13,7 +13,7 @@ extend('required', required);
 
 const fakeLocation = 'location';
 
-describe('locationSelect', () => {
+describe(LocationSelect.name, () => {
 	let comp;
 	let elButton;
 	let elInput;

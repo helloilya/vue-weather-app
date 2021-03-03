@@ -26,7 +26,7 @@ const comp = shallowMount(WeatherCard, {
 	},
 });
 
-describe('weatherCard', () => {
+describe(WeatherCard.name, () => {
 	it('should render component with correct data', () => {
 		const result = `${fakeWeather.temp}, ${fakeWeather.wind} ☴`;
 

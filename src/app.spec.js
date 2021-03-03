@@ -30,7 +30,7 @@ localVue.filter('round', filter);
 localVue.use(Vuex);
 localVue.use(VueRouter);
 
-describe('app', () => {
+describe(App.name, () => {
 	let comp;
 	let store;
 	let getters;

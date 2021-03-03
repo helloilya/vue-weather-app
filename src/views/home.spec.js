@@ -24,7 +24,7 @@ const fakeWeather = {
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe('home', () => {
+describe(Home.name, () => {
 	let comp;
 	let store;
 	let getters;
