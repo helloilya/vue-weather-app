@@ -5,10 +5,10 @@
 		:unit-object="{!UnitModel}" />
 -->
 
-<template>
-	<div v-if="weather.temp" class="weather-card">
-		<img :src="'//openweathermap.org/img/wn/' + weather.clouds.icon + '@2x.png'" :alt="weather.clouds.main" class="weather-card-img" width="150" height="150">
-		<div class="weather-card-data">{{weather.temp | round | temperature(unitObject)}}, {{weather.wind | round}} &#9780;</div>
+<template functional>
+	<div v-if="props.weather.temp" class="weather-card">
+		<img :src="'//openweathermap.org/img/wn/' + props.weather.clouds.icon + '@2x.png'" :alt="props.weather.clouds.main" class="weather-card-img" width="150" height="150">
+		<div class="weather-card-data">{{props.weather.temp | round | temperature(props.unitObject)}}, {{props.weather.wind | round}} &#9780;</div>
 	</div>
 </template>
 
