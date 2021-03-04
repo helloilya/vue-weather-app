@@ -17,10 +17,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import TemperatureControl from '@/controls/TemperatureControl';
 import { constants as settingStore } from '@/store/modules/setting';
 import { constants as weatherStore } from '@/store/modules/weather';
 import { ROUTE_STATES } from '@/constants';
+
+const TemperatureControl = () => import(/* webpackChunkName: 'TemperatureControl' */ '@/controls/TemperatureControl');
 
 export default {
 	name: 'App',
