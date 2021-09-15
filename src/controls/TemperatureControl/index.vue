@@ -5,7 +5,7 @@
 -->
 
 <template>
-	<select :value="value" class="temperature-control" @change="updateValue($event)">
+	<select :value="modelValue" class="temperature-control" @input="updateValue($event)">
 		<option v-for="item in list" :key="item.id" :value="item.id">{{item.name}}</option>
 	</select>
 </template>
@@ -15,22 +15,21 @@ import { TEMPERATURE_UNITS } from '@/constants';
 
 export default {
 	name: 'TemperatureControl',
-	model: {
-		prop: 'value',
-		event: 'change',
-	},
 	props: {
-		value: {
+		modelValue: {
 			type: Number,
 			required: true,
 		},
 	},
+	emits: [
+		'update:modelValue',
+	],
 	data: () => ({
 		list: TEMPERATURE_UNITS,
 	}),
 	methods: {
 		updateValue($event) {
-			this.$emit('change', Number($event.target.value));
+			this.$emit('update:modelValue', Number($event.target.value));
 		},
 	},
 };

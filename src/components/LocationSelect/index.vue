@@ -6,11 +6,10 @@
 -->
 
 <template>
-	<ValidationProvider v-slot="{errors, invalid}" ref="city" tag="div" rules="city|required" class="location-select">
+	<div class="location-select">
 		<LocationAutoSuggestionControl ref="input" v-model="selectedLocation" placeholder="City name" @key-enter="updateLocation" />
-		<button type="button" class="location-select-button" :disabled="invalid" @click="updateLocation">Search</button>
-		<span class="location-select-message">{{errors[0]}}</span>
-	</ValidationProvider>
+		<button type="button" class="location-select-button" :disabled="!!selectedLocation" @click="updateLocation">Search</button>
+	</div>
 </template>
 
 <script>
@@ -27,6 +26,9 @@ export default {
 			required: true,
 		},
 	},
+	emits: [
+		'callback',
+	],
 	data: () => ({
 		selectedLocation: '',
 	}),
@@ -34,11 +36,8 @@ export default {
 		this.selectedLocation = this.location;
 	},
 	methods: {
-		async updateLocation() {
-			const {valid} = await this.$refs.city.validate();
-			if (valid) {
-				this.$emit('callback', this.selectedLocation);
-			}
+		updateLocation() {
+			this.$emit('callback', this.selectedLocation);
 		},
 	},
 };

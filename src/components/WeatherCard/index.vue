@@ -5,14 +5,16 @@
 		:unit-object="{!UnitModel}" />
 -->
 
-<template functional>
-	<div v-if="props.weather.temp" class="weather-card">
-		<img :src="'//openweathermap.org/img/wn/' + props.weather.clouds.icon + '@2x.png'" :alt="props.weather.clouds.main" class="weather-card-img" width="150" height="150">
-		<div class="weather-card-data">{{props.weather.temp | round | temperature(props.unitObject)}}, {{props.weather.wind | round}} &#9780;</div>
+<template>
+	<div v-if="weather.temp" class="weather-card">
+		<img :src="'//openweathermap.org/img/wn/' + weather.clouds.icon + '@2x.png'" :alt="weather.clouds.main" class="weather-card-img" width="150" height="150">
+		<div class="weather-card-data">{{temperature}} {{unitObject.symbol}}, {{wind}} &#9780;</div>
 	</div>
 </template>
 
 <script>
+import { TEMPERATURE_UNITS } from '@/constants';
+
 export default {
 	name: 'WeatherCard',
 	props: {
@@ -23,6 +25,15 @@ export default {
 		unitObject: {
 			type: Object,
 			required: true,
+		},
+	},
+	computed: {
+		wind() {
+			return Math.round(this.weather.wind);
+		},
+		temperature() {
+			const value = this.unitObject.key === TEMPERATURE_UNITS[0].key ? this.weather.temp : this.weather.temp * 1.8 + 32;
+			return Math.round(value);
 		},
 	},
 };

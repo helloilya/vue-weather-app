@@ -1,14 +1,10 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
 import Home from '@/views/Home';
 import Error from '@/views/Error';
+import { createRouter, createWebHistory } from 'vue-router';
 import { ROUTE_STATES } from '@/constants';
 
-Vue.use(VueRouter);
-
-const router = new VueRouter({
-	mode: 'history',
-	base: process.env.BASE_URL,
+const router = createRouter({
+	history: createWebHistory(process.env.BASE_URL),
 	linkExactActiveClass: 'is-active',
 	routes: [
 		{
@@ -22,7 +18,7 @@ const router = new VueRouter({
 			component: () => import(/* webpackChunkName: 'about' */ '@/views/About'),
 		},
 		{
-			path: '*',
+			path: '/:pathMatch(.*)*',
 			name: ROUTE_STATES.ERROR,
 			component: Error,
 		},

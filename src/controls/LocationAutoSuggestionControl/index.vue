@@ -12,12 +12,12 @@
 	<div class="bg-light location-suggestion-control" :data-suggestion="suggestion">
 		<input
 			class="location-suggestion-control-input"
-			:value="value"
+			:value="modelValue"
 			:placeholder="placeholder"
 			:disabled="disabled"
 			:required="required"
-			@input="loadCities($event.target.value)"
-			@keyup.enter="onEnterHandler($event.target.value)">
+			@input="loadCities($event)"
+			@keyup.enter="onEnterHandler($event)">
 	</div>
 </template>
 
@@ -26,14 +26,10 @@ import api from '@/api';
 
 export default {
 	name: 'LocationAutoSuggestionControl',
-	model: {
-		prop: 'value',
-		event: 'input',
-	},
 	props: {
-		value: {
+		modelValue: {
 			type: String,
-			default: '',
+			required: true,
 		},
 		placeholder: {
 			type: String,
@@ -48,30 +44,31 @@ export default {
 			default: false,
 		},
 	},
+	emits: [
+		'update:modelValue',
+		'key-enter',
+	],
 	data: () => ({
 		timer: null,
 		suggestion: '',
 	}),
 	methods: {
-		loadCities(value) {
-			this.suggestion = '';
-			this.$emit('input', value);
+		loadCities($event) {
+			const value = $event.target.value;
+			this.$emit('update:modelValue', value);
 
+			this.suggestion = '';
 			clearTimeout(this.timer);
 			this.timer = setTimeout(async () => {
-				if (value.length > 2) {
-					const isLowerCase = value[0] === value[0].toLowerCase();
-					/** @type {!CityModel[]} */
-					const response = await api.geo.getCities(value);
-					if (response.length) {
-						const name = response[0].name;
-						this.suggestion = isLowerCase ? name.toLowerCase() : name;
-					}
+				/** @type {!CityModel[]} */
+				const response = await api.geo.getCities(value);
+				if (value && response.length) {
+					this.suggestion = response[0].name.toLowerCase();
 				}
 			}, 250);
 		},
-		onEnterHandler(value) {
-			this.$emit('key-enter', value);
+		onEnterHandler($event) {
+			this.$emit('key-enter', $event.target.value);
 		},
 	},
 };

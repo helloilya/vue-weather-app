@@ -1,6 +1,5 @@
 import api from '@/api';
 import geo from '@/services/geo';
-import utils from '@/store/utils/weather';
 import { constants as settingStore } from '@/store/modules/setting';
 import { DEFAULT_CITY } from '@/constants';
 
@@ -37,7 +36,6 @@ const actions = {
 		}
 
 		dispatch(settingStore.actions.saveCity, weather, { root: true });
-		utils.updateLocationParamValue(weather.name);
 		commit('updateWeather', weather);
 	},
 
@@ -45,7 +43,7 @@ const actions = {
 	 * Inits default weather based on query params and user geo coords.
 	 */
 	async initWeather({ dispatch, commit }) {
-		const query = utils.getLocationParamValue();
+		const query = DEFAULT_CITY;
 		const coords = await geo.getLocationCoords();
 
 		let location;
@@ -62,7 +60,6 @@ const actions = {
 		}
 
 		dispatch(settingStore.actions.saveCity, weather, { root: true });
-		utils.updateLocationParamValue(weather.name);
 		commit('updateWeather', weather);
 		commit('setStateAsLoaded');
 	},

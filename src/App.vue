@@ -3,7 +3,7 @@
 		<div v-if="!isLoaded">Loading ...</div>
 		<div v-if="isLoaded">
 			<router-view />
-			<TemperatureControl ref="select" v-model="unit" class="app-temperature-control" @change="onChangeUnit()" />
+			<TemperatureControl ref="select" v-model="unit" class="app-temperature-control" @change="onChangeUnit" />
 			<div class="app-menu">
 				<router-link v-if="currentState !== homeState"
 							 :to="{ name: homeState, query: { location: lastSavedCityName.toLowerCase() }}">
@@ -16,12 +16,13 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import { constants as settingStore } from '@/store/modules/setting';
 import { constants as weatherStore } from '@/store/modules/weather';
 import { ROUTE_STATES } from '@/constants';
 
-const TemperatureControl = () => import(/* webpackChunkName: 'TemperatureControl' */ '@/controls/TemperatureControl');
+const TemperatureControl = defineAsyncComponent(() => import(/* webpackChunkName: 'TemperatureControl' */ '@/controls/TemperatureControl'));
 
 export default {
 	name: 'App',
@@ -41,8 +42,11 @@ export default {
 		}),
 	},
 	watch: {
-		'$route.name': function(name) {
-			this.currentState = name;
+		'$route.name': {
+			handler(name) {
+				this.currentState = name;
+			},
+			deep: true,
 		},
 	},
 	created() {
