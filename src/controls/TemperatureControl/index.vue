@@ -1,37 +1,36 @@
 <!--
 	Usage:
-	<TemperatureControl
-		v-model="{number}" />
+	<TemperatureControl v-model="{number}" />
 -->
 
 <template>
-	<select :value="modelValue" class="temperature-control" @input="updateValue($event)">
-		<option v-for="item in list" :key="item.id" :value="item.id">{{item.name}}</option>
+	<select :value="modelValue" class="temperature-control" @input="onSelectChange($event)">
+		<option v-for="item in TEMPERATURE_UNITS" :key="item.id" :value="item.id">{{item.name}}</option>
 	</select>
 </template>
 
 <script>
-import { TEMPERATURE_UNITS } from '@/constants';
-
 export default {
 	name: 'TemperatureControl',
-	props: {
-		modelValue: {
-			type: Number,
-			required: true,
-		},
+};
+</script>
+
+<script setup>
+import { TEMPERATURE_UNITS } from '@/constants';
+
+const emit = defineEmits(['update:modelValue']);
+const props = defineProps({
+	modelValue: {
+		type: Number,
+		required: true,
 	},
-	emits: [
-		'update:modelValue',
-	],
-	data: () => ({
-		list: TEMPERATURE_UNITS,
-	}),
-	methods: {
-		updateValue($event) {
-			this.$emit('update:modelValue', Number($event.target.value));
-		},
-	},
+});
+
+/**
+ * Emits select update event.
+ */
+const onSelectChange = ($event) => {
+	emit('update:modelValue', Number($event.target.value));
 };
 </script>
 

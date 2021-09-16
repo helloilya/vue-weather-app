@@ -1,8 +1,7 @@
 import { expect } from 'chai';
-import { mount, createLocalVue } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import TemperatureControl from './index';
 
-const localVue = createLocalVue();
 const fakeModelValue = 1;
 
 describe(TemperatureControl.name, () => {
@@ -11,9 +10,8 @@ describe(TemperatureControl.name, () => {
 
 	beforeEach(() => {
 		comp = mount(TemperatureControl, {
-			localVue,
-			propsData: {
-				value: fakeModelValue,
+			props: {
+				modelValue: fakeModelValue,
 			},
 			sync: false,
 		});
@@ -22,8 +20,10 @@ describe(TemperatureControl.name, () => {
 	});
 
 	it('should call callback emit', async () => {
-		elSelect.trigger('change');
+		elSelect.trigger('input');
 
-		expect(comp.emitted().change[0]).to.deep.equal([fakeModelValue]);
+		const event = comp.emitted('update:modelValue');
+
+		expect(event[0]).to.deep.equal([fakeModelValue]);
 	});
 });

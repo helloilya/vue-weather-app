@@ -17,60 +17,71 @@
 			:disabled="disabled"
 			:required="required"
 			@input="loadCities($event)"
-			@keyup.enter="onEnterHandler($event)">
+			@keyup.enter="onInputKeyEnter($event)">
 	</div>
 </template>
 
 <script>
-import api from '@/api';
-
 export default {
 	name: 'LocationAutoSuggestionControl',
-	props: {
-		modelValue: {
-			type: String,
-			required: true,
-		},
-		placeholder: {
-			type: String,
-			default: '',
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
-		required: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	emits: [
-		'update:modelValue',
-		'key-enter',
-	],
-	data: () => ({
-		timer: null,
-		suggestion: '',
-	}),
-	methods: {
-		loadCities($event) {
-			const value = $event.target.value;
-			this.$emit('update:modelValue', value);
+};
+</script>
 
-			this.suggestion = '';
-			clearTimeout(this.timer);
-			this.timer = setTimeout(async () => {
-				/** @type {!CityModel[]} */
-				const response = await api.geo.getCities(value);
-				if (value && response.length) {
-					this.suggestion = response[0].name.toLowerCase();
-				}
-			}, 250);
-		},
-		onEnterHandler($event) {
-			this.$emit('key-enter', $event.target.value);
-		},
+<script setup>
+import api from '@/api';
+import { ref } from 'vue';
+
+const emit = defineEmits([
+	'update:modelValue',
+	'key-enter',
+]);
+const props = defineProps({
+	modelValue: {
+		type: String,
+		required: true,
 	},
+	placeholder: {
+		type: String,
+		default: '',
+	},
+	disabled: {
+		type: Boolean,
+		default: false,
+	},
+	required: {
+		type: Boolean,
+		default: false,
+	},
+});
+
+const timer = ref(null);
+const suggestion = ref('');
+
+/**
+ * Loads the list of cities.
+ */
+const loadCities = ($event) => {
+	const query = $event.target.value;
+	emit('update:modelValue', query);
+
+	suggestion.value = '';
+	clearTimeout(timer.value);
+	timer.value = setTimeout(async () => {
+		if (query && query.length > 2) {
+			/** @type {!CityModel[]} */
+			const response = await api.geo.getCities(query);
+			if (response.length) {
+				suggestion.value = response[0].name.toLowerCase();
+			}
+		}
+	}, 250);
+};
+
+/**
+ * Emits input keyEnter event.
+ */
+const onInputKeyEnter = ($event) => {
+	emit('key-enter', $event.target.value);
 };
 </script>
 
