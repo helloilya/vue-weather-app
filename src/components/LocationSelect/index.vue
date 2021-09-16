@@ -7,39 +7,37 @@
 
 <template>
 	<div class="location-select">
-		<LocationAutoSuggestionControl ref="input" v-model="selectedLocation" placeholder="City name" @key-enter="updateLocation" />
-		<button type="button" class="location-select-button" :disabled="!!selectedLocation" @click="updateLocation">Search</button>
+		<LocationAutoSuggestionControl ref="input" v-model="selectedLocation" placeholder="Please type city" @key-enter="updateLocation" />
+		<button type="button" class="location-select-button" title="Search" :disabled="!selectedLocation" @click="updateLocation(selectedLocation)">Search</button>
 	</div>
 </template>
 
 <script>
-import LocationAutoSuggestionControl from '@/controls/LocationAutoSuggestionControl';
-
 export default {
 	name: 'LocationSelect',
-	components: {
-		LocationAutoSuggestionControl,
+};
+</script>
+
+<script setup>
+import LocationAutoSuggestionControl from '@/controls/LocationAutoSuggestionControl';
+import { computed, ref } from 'vue';
+
+const emit = defineEmits(['callback']);
+const props = defineProps({
+	location: {
+		type: String,
+		required: true,
 	},
-	props: {
-		location: {
-			type: String,
-			required: true,
-		},
-	},
-	emits: [
-		'callback',
-	],
-	data: () => ({
-		selectedLocation: '',
-	}),
-	created() {
-		this.selectedLocation = this.location;
-	},
-	methods: {
-		updateLocation() {
-			this.$emit('callback', this.selectedLocation);
-		},
-	},
+});
+
+const selectedLocation = ref(props.location);
+
+/**
+ * Updates location callback.
+ * @param {string} location
+ */
+const updateLocation = (location) => {
+	emit('callback', location);
 };
 </script>
 

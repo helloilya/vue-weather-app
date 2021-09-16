@@ -13,30 +13,32 @@
 </template>
 
 <script>
-import { TEMPERATURE_UNITS } from '@/constants';
-
 export default {
 	name: 'WeatherCard',
-	props: {
-		weather: {
-			type: Object,
-			required: true,
-		},
-		unitObject: {
-			type: Object,
-			required: true,
-		},
-	},
-	computed: {
-		wind() {
-			return Math.round(this.weather.wind);
-		},
-		temperature() {
-			const value = this.unitObject.key === TEMPERATURE_UNITS[0].key ? this.weather.temp : this.weather.temp * 1.8 + 32;
-			return Math.round(value);
-		},
-	},
 };
+</script>
+
+<script setup>
+import { computed, toRefs } from 'vue';
+import { TEMPERATURE_UNITS } from '@/constants';
+
+const props = defineProps({
+	weather: {
+		type: Object,
+		required: true,
+	},
+	unitObject: {
+		type: Object,
+		required: true,
+	},
+});
+
+const { weather, unitObject } = toRefs(props);
+const wind = computed(() => Math.round(weather.value.wind));
+const temperature = computed(() => {
+	const value = unitObject.value.key === TEMPERATURE_UNITS[0].key ? weather.value.temp : weather.value.temp * 1.8 + 32;
+	return Math.round(value);
+});
 </script>
 
 <style scoped lang="scss">
