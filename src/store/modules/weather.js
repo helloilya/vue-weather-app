@@ -1,7 +1,16 @@
 import api from '@/api';
 import geo from '@/services/geo';
+import router from '@/router';
 import { constants as settingStore } from '@/store/modules/setting';
-import { DEFAULT_CITY } from '@/constants';
+import { DEFAULT_CITY, QUERY_PARAMS, ROUTE_STATES } from '@/constants';
+
+function updateLocationQueryParam(value) {
+	router.push({
+		query: {
+			[QUERY_PARAMS.LOCATION]: value.toLowerCase(),
+		},
+	});
+}
 
 const state = {
 	isLoaded: false,
@@ -26,7 +35,7 @@ const mutations = {
 
 const actions = {
 	/**
-	 * Gets weather by city name and updates data/query.
+	 * Gets weather by city name.
 	 * @param {string} location
 	 */
 	async updateWeather({ dispatch, commit }, location) {
@@ -36,30 +45,27 @@ const actions = {
 		}
 
 		dispatch(settingStore.actions.saveCity, weather, { root: true });
+		updateLocationQueryParam(location);
 		commit('updateWeather', weather);
 	},
 
 	/**
-	 * Inits default weather based on query params and user geo coords.
+	 * Inits default weather based on user geo coords.
 	 */
 	async initWeather({ dispatch, commit }) {
-		const query = DEFAULT_CITY;
+		const locationSearchParam = new URL(window.location.href).searchParams.get(QUERY_PARAMS.LOCATION);
 		const coords = await geo.getLocationCoords();
 
-		let location;
-		if (query && query.length > 2) {
-			const cities = await api.geo.getCities(query);
-			location = cities.length ? cities[0].name : undefined;
-		}
-
-		let weather;
-		if (location) {
-			weather = await api.weather.getWeatherByCity(location);
-		} else {
-			weather = coords ? await api.weather.getWeatherByCoords(coords) : await api.weather.getWeatherByCity(DEFAULT_CITY);
+		let weather = locationSearchParam ? await api.weather.getWeatherByCity(locationSearchParam)
+										  : await api.weather.getWeatherByCoords(coords);
+		if (!weather.id) {
+			weather = await api.weather.getWeatherByCity(DEFAULT_CITY);
 		}
 
 		dispatch(settingStore.actions.saveCity, weather, { root: true });
+		if (router.currentRoute.value.name === ROUTE_STATES.HOME) {
+			updateLocationQueryParam(weather.name);
+		}
 		commit('updateWeather', weather);
 		commit('setStateAsLoaded');
 	},
