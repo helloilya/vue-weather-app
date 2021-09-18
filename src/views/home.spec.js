@@ -1,12 +1,12 @@
-import Vuex from 'vuex';
 import sinon from 'sinon';
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import { expect } from 'chai';
 import Home from './Home';
+import { createStore } from 'vuex';
+import { expect } from 'chai';
+import { shallowMount } from '@vue/test-utils';
 import { constants as settingStore } from '@/store/modules/setting';
 import { constants as weatherStore } from '@/store/modules/weather';
 
-const fakeCity = 'city';
+const fakeLocation = 'location';
 
 /** {!UnitModel} */
 const fakeUnit = {
@@ -17,12 +17,9 @@ const fakeUnit = {
 /** {!WeatherModel} */
 const fakeWeather = {
 	id: 1,
-	name: fakeCity,
+	name: fakeLocation,
 	clouds: {},
 };
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
 
 describe(Home.name, () => {
 	let comp;
@@ -38,18 +35,27 @@ describe(Home.name, () => {
 		actions = {
 			[weatherStore.actions.update]: sinon.stub(),
 		};
-		store = new Vuex.Store({
+		store = createStore({
 			getters,
 			actions,
 		});
 
 		comp = shallowMount(Home, {
-			localVue,
-			store,
+			global: {
+				provide: {
+					store: store,
+				},
+			},
 		});
 	});
 
 	it('should set default city', () => {
-		expect(comp.vm.location).to.equal(fakeCity);
+		expect(comp.vm.weather.name).to.equal(fakeLocation);
+	});
+
+	it('should dispatch update action', () => {
+		comp.vm.updateWeather(fakeLocation);
+
+		sinon.assert.calledWith(actions[weatherStore.actions.update]);
 	});
 });

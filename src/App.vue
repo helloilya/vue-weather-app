@@ -3,10 +3,12 @@
 		<div v-if="!isLoaded">Loading ...</div>
 		<div v-if="isLoaded">
 			<router-view />
-			<TemperatureControl ref="select" v-model="unit" class="app-temperature-control" @change="onChangeUnit" />
+			<TemperatureControl ref="select" v-model="unit" class="app-temperature-control" @change="changeUnit" />
 			<div class="app-menu">
-				<router-link v-if="currentState !== homeState"
-							 :to="{ name: homeState, query: { location: lastSavedCityName.toLowerCase() }}">
+				<router-link v-if="route.name !== ROUTE_STATES.HOME"
+							 :to="{
+							 	name: ROUTE_STATES.HOME, query: { [QUERY_PARAMS.LOCATION]: savedLocation.toLowerCase(), }
+							 }">
 					Home
 				</router-link>
 				<router-link v-else to="/about">About</router-link>
@@ -16,54 +18,38 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue';
-import { mapActions, mapGetters } from 'vuex';
+export default {
+	name: 'App',
+};
+</script>
+
+<script setup>
+import { computed, defineAsyncComponent, ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import { constants as settingStore } from '@/store/modules/setting';
 import { constants as weatherStore } from '@/store/modules/weather';
-import { ROUTE_STATES } from '@/constants';
+import { QUERY_PARAMS, ROUTE_STATES } from '@/constants';
 
 const TemperatureControl = defineAsyncComponent(() => import(/* webpackChunkName: 'TemperatureControl' */ '@/controls/TemperatureControl'));
 
-export default {
-	name: 'App',
-	components: {
-		TemperatureControl,
-	},
-	data: () => ({
-		unit: 0,
-		currentState: '',
-		homeState: ROUTE_STATES.HOME,
-	}),
-	computed: {
-		...mapGetters({
-			isLoaded: weatherStore.getters.isLoaded,
-			unitObject: settingStore.getters.unit,
-			lastSavedCityName: settingStore.getters.lastSavedCityName,
-		}),
-	},
-	watch: {
-		'$route.name': {
-			handler(name) {
-				this.currentState = name;
-			},
-			deep: true,
-		},
-	},
-	created() {
-		this.unit = this.unitObject.id;
-		this.currentState = this.$route.name;
-		this.initWeather();
-	},
-	methods: {
-		...mapActions({
-			initWeather: weatherStore.actions.initWeather,
-			updateUnit: settingStore.actions.updateUnit,
-		}),
-		onChangeUnit() {
-			this.updateUnit(this.unit);
-		},
-	},
-};
+const store = useStore();
+const route = useRoute();
+
+const isLoaded = computed(() => store.getters[weatherStore.getters.isLoaded]);
+const unitObject = computed(() => store.getters[settingStore.getters.unit]);
+const savedLocation = computed(() => store.getters[settingStore.getters.lastSavedCityName]);
+const unit = ref(unitObject.value.id);
+
+/**
+ * Dispatches update weather action.
+ * @param {number} unit
+ */
+const changeUnit = () => store.dispatch(settingStore.actions.updateUnit, unit.value);
+
+// Inits
+
+store.dispatch(weatherStore.actions.initWeather);
 </script>
 
 <style scoped lang="scss">
