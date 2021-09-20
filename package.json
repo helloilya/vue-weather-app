@@ -16,6 +16,7 @@
     "test:unit": "vue-cli-service test:unit \"src/**/*.spec.js\" --recursive --watch"
   },
   "dependencies": {
+    "@vueuse/core": "^6.2.1",
     "axios": "^0.21.1",
     "core-js": "^3.8.2",
     "vee-validate": "^3.4.5",

@@ -24,9 +24,10 @@ export default {
 </script>
 
 <script setup>
-import { computed, defineAsyncComponent, ref } from 'vue';
+import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import { useTitle } from '@vueuse/core';
 import { constants as settingStore } from '@/store/modules/setting';
 import { constants as weatherStore } from '@/store/modules/weather';
 import { QUERY_PARAMS, ROUTE_STATES } from '@/constants';
@@ -35,6 +36,7 @@ const TemperatureControl = defineAsyncComponent(() => import(/* webpackChunkName
 
 const store = useStore();
 const route = useRoute();
+const title = useTitle();
 
 const isLoaded = computed(() => store.getters[weatherStore.getters.isLoaded]);
 const unitObject = computed(() => store.getters[settingStore.getters.unit]);
@@ -50,6 +52,9 @@ const changeUnit = () => store.dispatch(settingStore.actions.updateUnit, unit.va
 // Inits
 
 store.dispatch(weatherStore.actions.initWeather);
+watch(route, (route) => {
+	title.value = route.meta.title;
+});
 </script>
 
 <style scoped lang="scss">
