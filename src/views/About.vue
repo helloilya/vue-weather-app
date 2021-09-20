@@ -8,8 +8,5 @@
 <script>
 export default {
 	name: 'About',
-	metaInfo: {
-		title: 'About / Vue Weather App',
-	},
 };
 </script>

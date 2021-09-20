@@ -4,8 +4,8 @@ module.exports = {
 		node: true,
 	},
 	extends: [
-		'plugin:vue/essential',
-		'plugin:vue/recommended',
+		'plugin:vue/vue3-essential',
+		'plugin:vue/vue3-recommended',
 	],
 	rules: {
 		'vue/v-on-style': ['error', 'shorthand'],

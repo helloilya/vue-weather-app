@@ -1,20 +1,12 @@
-import Vue from 'vue';
-import VueMeta from 'vue-meta';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
-import '@/filters';
-import '@/validators';
+import { createApp } from 'vue';
 
-Vue.config.productionTip = process.env.NODE_ENV !== 'production';
-Vue.config.performance = process.env.NODE_ENV !== 'production';
+const app = createApp(App);
 
-Vue.use(VueMeta);
+app.config.performance = process.env.NODE_ENV !== 'production';
 
-global.$router = router;
-
-new Vue({
-	router,
-	store,
-	render: (h) => h(App),
-}).$mount('#app');
+app.use(router);
+app.use(store);
+app.mount('#app');

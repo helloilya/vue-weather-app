@@ -1,15 +1,7 @@
 import flushPromises from 'flush-promises';
 import { expect } from 'chai';
-import { ValidationProvider, extend } from 'vee-validate';
-import { mount, createLocalVue } from '@vue/test-utils';
-import { required } from 'vee-validate/dist/rules';
+import { mount } from '@vue/test-utils';
 import LocationSelect from './index';
-import { cityValidator } from '@/validators/custom';
-
-const localVue = createLocalVue();
-localVue.component('ValidationProvider', ValidationProvider);
-extend('city', cityValidator);
-extend('required', required);
 
 const fakeLocation = 'location';
 
@@ -20,7 +12,6 @@ describe(LocationSelect.name, () => {
 
 	beforeEach(() => {
 		comp = mount(LocationSelect, {
-			localVue,
 			propsData: {
 				location: fakeLocation,
 			},
@@ -39,20 +30,13 @@ describe(LocationSelect.name, () => {
 		elButton.trigger('click');
 		await flushPromises();
 
-		expect(comp.emitted().callback[0]).to.deep.equal([fakeLocation]);
+		const event = comp.emitted('callback');
+
+		expect(event[0]).to.deep.equal([fakeLocation]);
 	});
 
-	it('should show validation error message', async () => {
-		elInput.setValue('Saint Petersburg');
-
-		elButton.trigger('click');
-		await flushPromises();
-
-		expect(comp.find('span').text()).to.equal(cityValidator.message);
-	});
-
-	it('should disable input if location is not valid', async () => {
-		elInput.setValue('Saint Petersburg');
+	it('should disable input if location is not provided', async () => {
+		elInput.setValue('');
 
 		elButton.trigger('click');
 		await flushPromises();

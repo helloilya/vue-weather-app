@@ -1,9 +1,10 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import { expect } from 'chai';
 import WeatherCard from './index';
+import { shallowMount } from '@vue/test-utils';
+import { expect } from 'chai';
+import { TEMPERATURE_UNITS } from '@/constants';
 
 /** {!UnitModel} */
-const fakeUnit = {};
+const fakeUnit = TEMPERATURE_UNITS[0];
 
 /** {!WeatherModel} */
 const fakeWeather = {
@@ -12,15 +13,9 @@ const fakeWeather = {
 	clouds: {},
 };
 
-const localVue = createLocalVue();
-const filter = (value) => value;
-localVue.filter('round', filter);
-localVue.filter('temperature', filter);
-
 const comp = shallowMount(WeatherCard, {
-	localVue,
 	mocks: {},
-	propsData: {
+	props: {
 		weather: fakeWeather,
 		unitObject: fakeUnit,
 	},
@@ -28,7 +23,7 @@ const comp = shallowMount(WeatherCard, {
 
 describe(WeatherCard.name, () => {
 	it('should render component with correct data', () => {
-		const result = `${fakeWeather.temp}, ${fakeWeather.wind} ☴`;
+		const result = `${fakeWeather.temp} ${fakeUnit.symbol}, ${fakeWeather.wind} ☴`;
 
 		expect(comp.text()).to.equal(result);
 	});

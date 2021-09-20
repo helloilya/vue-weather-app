@@ -5,6 +5,14 @@
 const DEFAULT_CITY = 'Saint Petersburg';
 
 /**
+ * The list of names for query params.
+ * @enum {string}
+ */
+const QUERY_PARAMS = {
+	LOCATION: 'location',
+};
+
+/**
  * The list of names for routing.
  * @enum {string}
  */
@@ -35,6 +43,7 @@ const TEMPERATURE_UNITS = [
 
 export {
 	DEFAULT_CITY,
+	QUERY_PARAMS,
 	ROUTE_STATES,
 	TEMPERATURE_UNITS,
 };

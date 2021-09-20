@@ -12,68 +12,76 @@
 	<div class="bg-light location-suggestion-control" :data-suggestion="suggestion">
 		<input
 			class="location-suggestion-control-input"
-			:value="value"
+			:value="modelValue"
 			:placeholder="placeholder"
 			:disabled="disabled"
 			:required="required"
-			@input="loadCities($event.target.value)"
-			@keyup.enter="onEnterHandler($event.target.value)">
+			@input="loadCities($event)"
+			@keyup.enter="onInputKeyEnter($event)">
 	</div>
 </template>
 
 <script>
-import api from '@/api';
-
 export default {
 	name: 'LocationAutoSuggestionControl',
-	model: {
-		prop: 'value',
-		event: 'input',
-	},
-	props: {
-		value: {
-			type: String,
-			default: '',
-		},
-		placeholder: {
-			type: String,
-			default: '',
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
-		required: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	data: () => ({
-		timer: null,
-		suggestion: '',
-	}),
-	methods: {
-		loadCities(value) {
-			this.suggestion = '';
-			this.$emit('input', value);
+};
+</script>
 
-			clearTimeout(this.timer);
-			this.timer = setTimeout(async () => {
-				if (value.length > 2) {
-					const isLowerCase = value[0] === value[0].toLowerCase();
-					/** @type {!CityModel[]} */
-					const response = await api.geo.getCities(value);
-					if (response.length) {
-						const name = response[0].name;
-						this.suggestion = isLowerCase ? name.toLowerCase() : name;
-					}
-				}
-			}, 250);
-		},
-		onEnterHandler(value) {
-			this.$emit('key-enter', value);
-		},
+<script setup>
+import api from '@/api';
+import { ref } from 'vue';
+
+const emit = defineEmits([
+	'update:modelValue',
+	'key-enter',
+]);
+const props = defineProps({
+	modelValue: {
+		type: String,
+		required: true,
 	},
+	placeholder: {
+		type: String,
+		default: '',
+	},
+	disabled: {
+		type: Boolean,
+		default: false,
+	},
+	required: {
+		type: Boolean,
+		default: false,
+	},
+});
+
+const timer = ref(null);
+const suggestion = ref('');
+
+/**
+ * Loads the list of cities.
+ */
+const loadCities = ($event) => {
+	const query = $event.target.value;
+	emit('update:modelValue', query);
+
+	suggestion.value = '';
+	clearTimeout(timer.value);
+	timer.value = setTimeout(async () => {
+		if (query && query.length > 2) {
+			/** @type {!CityModel[]} */
+			const response = await api.geo.getCities(query);
+			if (response.length) {
+				suggestion.value = response[0].name.toLowerCase();
+			}
+		}
+	}, 250);
+};
+
+/**
+ * Emits input keyEnter event.
+ */
+const onInputKeyEnter = ($event) => {
+	emit('key-enter', $event.target.value);
 };
 </script>
 

@@ -1,11 +1,13 @@
-import Vuex from 'vuex';
-import VueRouter from 'vue-router';
-import sinon from 'sinon';
-import { createLocalVue, shallowMount, RouterLinkStub } from '@vue/test-utils';
-import { expect } from 'chai';
 import App from './App';
+import flushPromises from 'flush-promises';
+import router from '@/router';
+import sinon from 'sinon';
+import { createStore } from 'vuex';
+import { expect } from 'chai';
+import { shallowMount } from '@vue/test-utils';
 import { constants as settingStore } from '@/store/modules/setting';
 import { constants as weatherStore } from '@/store/modules/weather';
+import { ROUTE_STATES } from '@/constants';
 
 /** {!UnitModel} */
 const fakeUnit = {
@@ -13,22 +15,7 @@ const fakeUnit = {
 	name: 'unit',
 };
 
-const fakeRoute = {
-	path: '',
-	name: 'name',
-};
-
 const fakeCity = 'city';
-
-const localVue = createLocalVue();
-const filter = (value) => value;
-const router = new VueRouter({
-	routes: [fakeRoute],
-});
-
-localVue.filter('round', filter);
-localVue.use(Vuex);
-localVue.use(VueRouter);
 
 describe(App.name, () => {
 	let comp;
@@ -46,15 +33,18 @@ describe(App.name, () => {
 			[settingStore.actions.updateUnit]: sinon.stub(),
 			[weatherStore.actions.initWeather]: sinon.stub(),
 		};
-		store = new Vuex.Store({
+		store = createStore({
 			getters,
 			actions,
 		});
 
 		comp = shallowMount(App, {
-			localVue,
-			store,
-			router,
+			global: {
+				plugins: [router],
+				provide: {
+					store: store,
+				},
+			},
 		});
 	});
 
@@ -62,8 +52,13 @@ describe(App.name, () => {
 		expect(comp.vm.unit).to.equal(fakeUnit.id);
 	});
 
-	it('should set currentState', () => {
-		expect(comp.vm.currentState).to.equal(fakeRoute.name);
+	it('should update route title', async () => {
+		const title = router.options.routes.find((item) => item.name === ROUTE_STATES.ABOUT).meta.title;
+
+		router.push(ROUTE_STATES.ABOUT);
+		await flushPromises();
+
+		expect(comp.vm.title).to.equal(title);
 	});
 
 	it('should call getDefaultWeather', () => {
@@ -71,7 +66,7 @@ describe(App.name, () => {
 	});
 
 	it('should call updateUnit', () => {
-		comp.vm.onChangeUnit();
+		comp.vm.changeUnit();
 
 		sinon.assert.calledWith(actions[settingStore.actions.updateUnit]);
 	});
