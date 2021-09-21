@@ -9,7 +9,7 @@
 -->
 
 <template>
-	<div class="bg-light location-suggestion-control" :data-suggestion="suggestion">
+	<div class="location-suggestion-control" :data-suggestion="suggestion">
 		<input
 			class="location-suggestion-control-input"
 			:value="modelValue"
@@ -88,6 +88,9 @@ const onInputKeyEnter = ($event) => {
 <style scoped lang="scss">
 .location-suggestion-control {
 	position: relative;
+	background: var(--field-bg-color);
+	border-radius: 4px;
+	transition: background .4s;
 
 	&::after {
 		width: 100%;
@@ -101,6 +104,7 @@ const onInputKeyEnter = ($event) => {
 		text-align: left;
 		text-indent: 1px;
 		content: attr(data-suggestion);
+		overflow: hidden;
 		opacity: 0.4;
 	}
 

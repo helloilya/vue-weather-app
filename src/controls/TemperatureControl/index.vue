@@ -49,7 +49,11 @@ const onSelectChange = ($event) => {
 
 	&:hover,
 	&:focus {
-		background-color: #fff;
+		background-color: var(--field-bg-color);
+	}
+
+	.dark & {
+		background-image: url('/images/icon-temperature-dark.svg');
 	}
 }
 </style>

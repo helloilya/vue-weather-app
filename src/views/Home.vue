@@ -31,3 +31,9 @@ const unitObject = computed(() => store.getters[settingStore.getters.unit]);
  */
 const updateWeather = (location) => store.dispatch(weatherStore.actions.update, location);
 </script>
+
+<style scoped lang="scss">
+.weather-card {
+	margin-bottom: 30px;
+}
+</style>

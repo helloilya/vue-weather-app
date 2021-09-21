@@ -43,7 +43,6 @@ const temperature = computed(() => {
 
 <style scoped lang="scss">
 .weather-card {
-	margin-bottom: 30px;
 	text-align: center;
 
 	&-img {

@@ -3,7 +3,7 @@
 		<div v-if="!isLoaded">Loading ...</div>
 		<div v-if="isLoaded">
 			<router-view />
-			<TemperatureControl ref="select" v-model="unit" class="app-temperature-control" @change="changeUnit" />
+			<TemperatureControl v-model="unit" class="app-temperature-control" @change="changeUnit" />
 			<div class="app-menu">
 				<router-link v-if="route.name !== ROUTE_STATES.HOME"
 							 :to="{
@@ -67,9 +67,12 @@ watch(route, (route) => {
 	}
 
 	&-menu {
+		display: flex;
+		align-items: center;
 		position: absolute;
 		top: 20px;
 		right: 25px;
+		gap: 20px;
 		z-index: 1;
 		line-height: 2.1em;
 
