@@ -12,6 +12,7 @@
 					Home
 				</router-link>
 				<router-link v-else to="/about">About</router-link>
+				<DarkThemeToggle />
 			</div>
 		</div>
 	</div>
@@ -33,6 +34,7 @@ import { constants as weatherStore } from '@/store/modules/weather';
 import { QUERY_PARAMS, ROUTE_STATES } from '@/constants';
 
 const TemperatureControl = defineAsyncComponent(() => import(/* webpackChunkName: 'TemperatureControl' */ '@/controls/TemperatureControl'));
+const DarkThemeToggle = defineAsyncComponent(() => import(/* webpackChunkName: 'DarkThemeToggle' */ '@/components/DarkThemeToggle'));
 
 const store = useStore();
 const route = useRoute();
