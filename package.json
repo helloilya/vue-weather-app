@@ -1,7 +1,7 @@
 {
   "name": "vue-weather-app",
-  "version": "0.3.0",
-  "description": "Simple weather application based on Vue.js",
+  "version": "0.4.0",
+  "description": "Simple weather application based on Vue 3",
   "author": "Ilya Fedotov <ilya@fedotov.me>",
   "homepage": "https://github.com/helloilya/vue-weather-app",
   "repository": {

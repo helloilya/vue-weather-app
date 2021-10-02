@@ -1,6 +1,6 @@
 # Vue Weather App
 
-> Simple weather application based on Vue.js
+> Simple weather application based on Vue 3
 
 ### Demo
 
@@ -25,6 +25,7 @@ The docs for list rules can be fount on [eslint](https://eslint.org/docs/rules/)
 
 ### Changelog
 
+* 0.4.0 - Migration to Vue 3; Support dark theme.
 * 0.3.0 — Support `location` query param.
 * 0.2.0 — Integration with GeoDB API.
 * 0.1.0 — Initial release.
