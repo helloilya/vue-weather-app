@@ -22,7 +22,9 @@ export default {
 import LocationAutoSuggestionControl from '@/controls/LocationAutoSuggestionControl';
 import { computed, ref } from 'vue';
 
-const emit = defineEmits(['callback']);
+const emit = defineEmits({
+	'callback': null,
+});
 const props = defineProps({
 	location: {
 		type: String,

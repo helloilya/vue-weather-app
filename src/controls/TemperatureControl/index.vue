@@ -18,7 +18,9 @@ export default {
 <script setup>
 import { TEMPERATURE_UNITS } from '@/constants';
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits({
+	'update:modelValue': null,
+});
 const props = defineProps({
 	modelValue: {
 		type: Number,

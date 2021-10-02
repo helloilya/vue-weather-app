@@ -31,10 +31,10 @@ export default {
 import api from '@/api';
 import { ref } from 'vue';
 
-const emit = defineEmits([
-	'update:modelValue',
-	'key-enter',
-]);
+const emit = defineEmits({
+	'update:modelValue': null,
+	'key-enter': null,
+});
 const props = defineProps({
 	modelValue: {
 		type: String,
