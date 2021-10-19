@@ -16,7 +16,7 @@
 			:placeholder="placeholder"
 			:disabled="disabled"
 			:required="required"
-			@input="loadCities($event)"
+			@input="onInputUpdate($event)"
 			@keyup.enter="onInputKeyEnter($event)">
 	</div>
 </template>
@@ -28,8 +28,8 @@ export default {
 </script>
 
 <script setup>
-import api from '@/api';
 import { ref } from 'vue';
+import useLocationSuggestion from '@/use/locationSuggestion';
 
 const emit = defineEmits({
 	'update:modelValue': null,
@@ -54,27 +54,15 @@ const props = defineProps({
 	},
 });
 
-const timer = ref(null);
-const suggestion = ref('');
+const query = ref(props.modelValue);
+const suggestion = useLocationSuggestion(query);
 
 /**
- * Loads the list of cities.
+ * Updates input query and emits onUpdate event.
  */
-const loadCities = ($event) => {
-	const query = $event.target.value;
-	emit('update:modelValue', query);
-
-	suggestion.value = '';
-	clearTimeout(timer.value);
-	timer.value = setTimeout(async () => {
-		if (query && query.length > 2) {
-			/** @type {!CityModel[]} */
-			const response = await api.geo.getCities(query);
-			if (response.length) {
-				suggestion.value = response[0].name.toLowerCase();
-			}
-		}
-	}, 250);
+const onInputUpdate = ($event) => {
+	query.value = $event.target.value;
+	emit('update:modelValue', $event.target.value);
 };
 
 /**
