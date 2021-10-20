@@ -8,6 +8,8 @@ import { constants as settingStore } from '@/store/modules/setting';
 
 const { getters, mutations, actions } = weather;
 const fakeLocation = 'location';
+
+/** {!WeatherModel} */
 const fakeWeather = {
 	id: 1,
 	name: fakeLocation,
