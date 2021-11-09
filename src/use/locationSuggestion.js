@@ -1,4 +1,5 @@
 import api from '@/api';
+import { debouncedWatch } from '@vueuse/core';
 import { isRef, ref, unref, watch } from 'vue';
 
 /**
@@ -8,31 +9,29 @@ import { isRef, ref, unref, watch } from 'vue';
 export default function useLocationSuggestion(query) {
 	const suggestion = ref('');
 	const cache = new Map();
-	let timer = 0;
 
-	const load = () => {
-		clearTimeout(timer);
-		timer = setTimeout(async () => {
-			const value = unref(query).toLowerCase();
-			if (!value && value.length < 2) {
-				suggestion.value = '';
-				return;
-			}
+	const load = async () => {
+		const value = unref(query).toLowerCase();
+		if (!value && value.length < 2) {
+			suggestion.value = '';
+			return;
+		}
 
-			if (cache.has(value)) {
-				suggestion.value = cache.get(value);
-				return;
-			}
+		if (cache.has(value)) {
+			suggestion.value = cache.get(value);
+			return;
+		}
 
-			const response = /** {!CityModel[]} */ await api.geo.getCities(value);
-			const entry = response.find((item) => item.name.toLowerCase().indexOf(value) === 0);
-			suggestion.value = entry ? entry.name.toLowerCase() : '';
-			cache.set(value, suggestion.value);
-		}, 250);
+		const response = /** {!CityModel[]} */ await api.geo.getCities(value);
+		const entry = response.find((item) => item.name.toLowerCase().indexOf(value) === 0);
+		suggestion.value = entry ? entry.name.toLowerCase() : '';
+		cache.set(value, suggestion.value);
 	};
 
 	if (isRef(query)) {
-		watch(query, load);
+		debouncedWatch(query, load, {
+			debounce: 350,
+		});
 	}
 
 	return suggestion;

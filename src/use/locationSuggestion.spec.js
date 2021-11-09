@@ -36,7 +36,7 @@ describe('useLocationSuggestion', () => {
 
 		query.value = fakeQuery;
 		await nextTick();
-		timerStab.tick(300);
+		timerStab.tick(400);
 		await flushPromises();
 		expect(result.value).to.equal(fakeCityItem.name.toLowerCase());
 	});
@@ -48,7 +48,7 @@ describe('useLocationSuggestion', () => {
 
 		query.value = 'fake';
 		await nextTick();
-		timerStab.tick(300);
+		timerStab.tick(400);
 		await flushPromises();
 		expect(result.value).to.equal('');
 	});
